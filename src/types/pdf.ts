@@ -9,10 +9,13 @@ export type PdfFile = {
 
 export type CreatePdfFile = Omit<PdfFile, 'id' | 'created_at'>;
 
+export type AudioLanguage = 'en' | 'zh';
+
 export interface PdfPageAudio {
   id: string;
   pdf_file_id: string;
   page_number: number;
+  language: AudioLanguage;
   audio_url: string | null;
   created_at: string;
   updated_at: string;

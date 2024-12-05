@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
-import { CreatePdfFile, PdfFile, PdfPageAudio } from '@/types/pdf';
+import { CreatePdfFile, PdfFile, PdfPageAudio, AudioLanguage } from '@/types/pdf';
 
 const STORAGE_BUCKET = 'pdfs';
 
@@ -83,11 +83,16 @@ export const pdfService = {
     return data;
   },
 
-  async uploadPageAudio(pdfId: string, pageNumber: number, file: File): Promise<PdfPageAudio | null> {
+  async uploadPageAudio(
+    pdfId: string,
+    pageNumber: number,
+    language: AudioLanguage,
+    file: File
+  ): Promise<PdfPageAudio | null> {
     try {
       const timestamp = Date.now();
       const extension = file.name.split('.').pop();
-      const filePath = `audio/${pdfId}/${pageNumber}_${timestamp}.${extension}`;
+      const filePath = `audio/${pdfId}/${pageNumber}_${language}_${timestamp}.${extension}`;
 
       // 既存の音声ファイルを確認
       const { data: existingAudio } = await supabase
@@ -95,6 +100,7 @@ export const pdfService = {
         .select('*')
         .eq('pdf_file_id', pdfId)
         .eq('page_number', pageNumber)
+        .eq('language', language)
         .single();
 
       // 既存の音声ファイルがある場合は削除
@@ -124,6 +130,7 @@ export const pdfService = {
         .upsert({
           pdf_file_id: pdfId,
           page_number: pageNumber,
+          language,
           audio_url: publicUrl
         })
         .select()
@@ -137,13 +144,18 @@ export const pdfService = {
     }
   },
 
-  async deletePageAudio(pdfId: string, pageNumber: number): Promise<void> {
+  async deletePageAudio(
+    pdfId: string,
+    pageNumber: number,
+    language: AudioLanguage
+  ): Promise<void> {
     try {
       const { data: audio } = await supabase
         .from('pdf_page_audio')
         .select('*')
         .eq('pdf_file_id', pdfId)
         .eq('page_number', pageNumber)
+        .eq('language', language)
         .single();
 
       if (audio?.audio_url) {
@@ -161,7 +173,8 @@ export const pdfService = {
         .from('pdf_page_audio')
         .delete()
         .eq('pdf_file_id', pdfId)
-        .eq('page_number', pageNumber);
+        .eq('page_number', pageNumber)
+        .eq('language', language);
     } catch (error) {
       console.error('Error deleting audio:', error);
       throw error;

@@ -40,6 +40,13 @@ export default function PDFUpload() {
     }
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      setFile(files[0])
+    }
+  }
+
   return (
     <AdminLayout>
       <h1 className="text-3xl font-bold mb-8">Upload PDF</h1>
@@ -67,7 +74,7 @@ export default function PDFUpload() {
             id="file"
             type="file"
             accept=".pdf"
-            onChange={(e) => setFile(e.files?.[0] || null)}
+            onChange={handleFileChange}
             required
           />
         </div>

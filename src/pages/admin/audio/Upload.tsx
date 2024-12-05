@@ -45,6 +45,13 @@ export default function AudioUpload() {
     }
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      setFile(files[0])
+    }
+  }
+
   return (
     <AdminLayout>
       <h1 className="text-3xl font-bold mb-8">Upload Audio</h1>
@@ -68,7 +75,7 @@ export default function AudioUpload() {
             id="file"
             type="file"
             accept="audio/*"
-            onChange={(e) => setFile(e.files?.[0] || null)}
+            onChange={handleFileChange}
             required
           />
         </div>

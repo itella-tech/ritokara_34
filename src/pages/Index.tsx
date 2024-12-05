@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Document, Page } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import { PdfFile, PdfPageAudio, AudioLanguage } from "@/types/pdf";
 import { pdfService } from "@/services/pdfService";
 import { supabase } from "@/lib/supabaseClient";
+
+// PDFワーカーの設定
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const LANGUAGE_LABELS: Record<AudioLanguage, string> = {
   en: '英語',

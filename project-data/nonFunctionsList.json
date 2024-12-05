@@ -1,0 +1,62 @@
+[
+  {
+    "id": "NON-001",
+    "category": "性能・拡張性",
+    "non_function_name": "レスポンス時間",
+    "description": "PDFページの切り替え時間は1秒以内、音声ファイルの再生開始は0.5秒以内とする"
+  },
+  {
+    "id": "NON-002",
+    "category": "性能・拡張性",
+    "non_function_name": "同時アクセス数",
+    "description": "最大100ユーザーの同時アクセスに対応する"
+  },
+  {
+    "id": "NON-003",
+    "category": "可用性",
+    "non_function_name": "システム稼働時間",
+    "description": "システムの稼働率は99.9%以上を維持する（計画メンテナンス時間を除く）"
+  },
+  {
+    "id": "NON-004",
+    "category": "セキュリティ",
+    "non_function_name": "アクセス制御",
+    "description": "管理者機能へのアクセスは認証済みユーザーのみに制限し、権限に応じた機能制御を行う"
+  },
+  {
+    "id": "NON-005",
+    "category": "セキュリティ",
+    "non_function_name": "データ保護",
+    "description": "GCPバケットに保存されるファイルは暗号化を行い、通信時はSSL/TLS暗号化を使用する"
+  },
+  {
+    "id": "NON-006",
+    "category": "運用・保守性",
+    "non_function_name": "バックアップ",
+    "description": "PDFファイル、音声ファイル、システムデータの自動バックアップを日次で実行する"
+  },
+  {
+    "id": "NON-007",
+    "category": "運用・保守性",
+    "non_function_name": "監視・ログ",
+    "description": "システムの動作状況、エラー発生、ファイルアップロード等の操作ログを記録・保管する"
+  },
+  {
+    "id": "NON-008",
+    "category": "互換性",
+    "non_function_name": "ブラウザ対応",
+    "description": "最新のChrome、Firefox、Safari、Edgeブラウザでの動作を保証する"
+  },
+  {
+    "id": "NON-009",
+    "category": "ユーザビリティ",
+    "non_function_name": "インターフェース",
+    "description": "直感的な操作が可能なUI/UXを提供し、ユーザーマニュアルなしでも基本操作が可能な設計とする"
+  },
+  {
+    "id": "NON-010",
+    "category": "拡張性",
+    "non_function_name": "ストレージ容量",
+    "description": "GCPバケットの容量は初期500GB、最大1TBまでの拡張に対応する"
+  }
+]

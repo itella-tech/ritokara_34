@@ -1,0 +1,252 @@
+[
+  {
+    "id": "TAB-001",
+    "table": "pdf_files",
+    "column": "id",
+    "dataType": "uuid",
+    "regulation": "PRIMARY KEY",
+    "defaultValue": "gen_random_uuid()",
+    "foreignKey": "",
+    "description": "PDFファイルの一意識別子"
+  },
+  {
+    "id": "TAB-002",
+    "table": "pdf_files",
+    "column": "file_name",
+    "dataType": "text",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "",
+    "description": "PDFファイルの名称"
+  },
+  {
+    "id": "TAB-003",
+    "table": "pdf_files",
+    "column": "file_path",
+    "dataType": "text",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "",
+    "description": "GCPバケット内のPDFファイルパス"
+  },
+  {
+    "id": "TAB-004",
+    "table": "pdf_files",
+    "column": "metadata",
+    "dataType": "jsonb",
+    "regulation": "NOT NULL",
+    "defaultValue": "{\"title\": {\"ja\": \"\", \"en\": \"\", \"zh\": \"\"}, \"description\": {\"ja\": \"\", \"en\": \"\", \"zh\": \"\"}, \"total_pages\": 0}",
+    "foreignKey": "",
+    "description": "PDFファイルの多言語メタデータ情報"
+  },
+  {
+    "id": "TAB-005",
+    "table": "pdf_files",
+    "column": "display_order",
+    "dataType": "integer",
+    "regulation": "NOT NULL",
+    "defaultValue": "0",
+    "foreignKey": "",
+    "description": "表示順序"
+  },
+  {
+    "id": "TAB-006",
+    "table": "pdf_files",
+    "column": "is_public",
+    "dataType": "boolean",
+    "regulation": "NOT NULL",
+    "defaultValue": "false",
+    "foreignKey": "",
+    "description": "公開状態"
+  },
+  {
+    "id": "TAB-007",
+    "table": "pdf_files",
+    "column": "version",
+    "dataType": "integer",
+    "regulation": "NOT NULL",
+    "defaultValue": "1",
+    "foreignKey": "",
+    "description": "ファイルのバージョン番号"
+  },
+  {
+    "id": "TAB-008",
+    "table": "pdf_files",
+    "column": "created_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "作成日時"
+  },
+  {
+    "id": "TAB-009",
+    "table": "pdf_files",
+    "column": "updated_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "更新日時"
+  },
+  {
+    "id": "TAB-010",
+    "table": "audio_files",
+    "column": "id",
+    "dataType": "uuid",
+    "regulation": "PRIMARY KEY",
+    "defaultValue": "gen_random_uuid()",
+    "foreignKey": "",
+    "description": "音声ファイルの一意識別子"
+  },
+  {
+    "id": "TAB-011",
+    "table": "audio_files",
+    "column": "file_name",
+    "dataType": "text",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "",
+    "description": "音声ファイルの名称"
+  },
+  {
+    "id": "TAB-012",
+    "table": "audio_files",
+    "column": "file_path",
+    "dataType": "text",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "",
+    "description": "GCPバケット内の音声ファイルパス"
+  },
+  {
+    "id": "TAB-013",
+    "table": "audio_files",
+    "column": "language",
+    "dataType": "text",
+    "regulation": "NOT NULL",
+    "defaultValue": "'ja'",
+    "foreignKey": "",
+    "description": "音声ファイルの言語（ja/en/zh）"
+  },
+  {
+    "id": "TAB-014",
+    "table": "audio_files",
+    "column": "duration",
+    "dataType": "integer",
+    "regulation": "NOT NULL",
+    "defaultValue": "0",
+    "foreignKey": "",
+    "description": "音声ファイルの再生時間（秒）"
+  },
+  {
+    "id": "TAB-015",
+    "table": "audio_files",
+    "column": "created_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "作成日時"
+  },
+  {
+    "id": "TAB-016",
+    "table": "audio_files",
+    "column": "updated_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "更新日時"
+  },
+  {
+    "id": "TAB-017",
+    "table": "pdf_audio_mappings",
+    "column": "id",
+    "dataType": "uuid",
+    "regulation": "PRIMARY KEY",
+    "defaultValue": "gen_random_uuid()",
+    "foreignKey": "",
+    "description": "PDFと音声の紐付けの一意識別子"
+  },
+  {
+    "id": "TAB-018",
+    "table": "pdf_audio_mappings",
+    "column": "pdf_id",
+    "dataType": "uuid",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "pdf_files.id",
+    "description": "PDFファイルID"
+  },
+  {
+    "id": "TAB-019",
+    "table": "pdf_audio_mappings",
+    "column": "audio_id",
+    "dataType": "uuid",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "audio_files.id",
+    "description": "音声ファイルID"
+  },
+  {
+    "id": "TAB-020",
+    "table": "pdf_audio_mappings",
+    "column": "page_number",
+    "dataType": "integer",
+    "regulation": "NOT NULL",
+    "defaultValue": "1",
+    "foreignKey": "",
+    "description": "PDFのページ番号"
+  },
+  {
+    "id": "TAB-021",
+    "table": "slideshow_settings",
+    "column": "id",
+    "dataType": "uuid",
+    "regulation": "PRIMARY KEY",
+    "defaultValue": "gen_random_uuid()",
+    "foreignKey": "",
+    "description": "スライドショー設定の一意識別子"
+  },
+  {
+    "id": "TAB-022",
+    "table": "slideshow_settings",
+    "column": "pdf_id",
+    "dataType": "uuid",
+    "regulation": "NOT NULL",
+    "defaultValue": "",
+    "foreignKey": "pdf_files.id",
+    "description": "PDFファイルID"
+  },
+  {
+    "id": "TAB-023",
+    "table": "slideshow_settings",
+    "column": "settings",
+    "dataType": "jsonb",
+    "regulation": "NOT NULL",
+    "defaultValue": "{\"autoPlay\": false, \"displayTime\": 5, \"transition\": \"fade\", \"loop\": false}",
+    "foreignKey": "",
+    "description": "スライドショーの表示設定"
+  },
+  {
+    "id": "TAB-024",
+    "table": "slideshow_settings",
+    "column": "created_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "作成日時"
+  },
+  {
+    "id": "TAB-025",
+    "table": "slideshow_settings",
+    "column": "updated_at",
+    "dataType": "timestamptz",
+    "regulation": "NOT NULL",
+    "defaultValue": "now()",
+    "foreignKey": "",
+    "description": "更新日時"
+  }
+]

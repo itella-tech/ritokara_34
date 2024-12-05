@@ -1,0 +1,173 @@
+[
+  {
+    "id": "FUN-001",
+    "category": "PDFファイル管理",
+    "function_name": "PDFアップロード機能",
+    "description": "PDFファイルをシステムにアップロードし、GCPバケットに保存する",
+    "input": "PDFファイル、ファイル名、説明文",
+    "output": "アップロード成功/失敗メッセージ、保存されたPDFファイルのURL",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-002",
+    "category": "PDFファイル管理",
+    "function_name": "PDFメタデータ設定機能",
+    "description": "アップロードしたPDFファイルのメタデータを設定・編集する",
+    "input": "PDFファイルID、タイトル、説明、表示順序、公開設定",
+    "output": "更新されたPDFメタデータ",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-003",
+    "category": "音声ファイル管理",
+    "function_name": "音声ファイルアップロード機能",
+    "description": "音声ファイルをシステムにアップロードし、GCPバケットに保存する",
+    "input": "音声ファイル（MP3）、言語区分、PDFページID",
+    "output": "アップロード成功/失敗メッセージ、保存された音声ファイルのURL",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-004",
+    "category": "音声ファイル管理",
+    "function_name": "音声ファイル紐付け機能",
+    "description": "音声ファイルとPDFページを紐付ける",
+    "input": "音声ファイルID、PDFページID、言語区分",
+    "output": "紐付け設定情報",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-005",
+    "category": "スライドショー表示",
+    "function_name": "PDFページ表示機能",
+    "description": "PDFファイルの各ページをスライドとして表示する",
+    "input": "PDFファイルID、ページ番号",
+    "output": "スライド表示画面",
+    "user": "一般ユーザー"
+  },
+  {
+    "id": "FUN-006",
+    "category": "スライドショー表示",
+    "function_name": "ページ切替機能",
+    "description": "表示中のスライドを前後のページに切り替える",
+    "input": "切替方向（前/次）",
+    "output": "更新されたスライド表示",
+    "user": "一般ユーザー"
+  },
+  {
+    "id": "FUN-007",
+    "category": "音声再生",
+    "function_name": "音声再生機能",
+    "description": "選択された言語の音声ファイルを再生する",
+    "input": "音声ファイルID、再生コマンド",
+    "output": "音声再生状態",
+    "user": "一般ユーザー"
+  },
+  {
+    "id": "FUN-008",
+    "category": "音声再生",
+    "function_name": "音声言語切替機能",
+    "description": "再生する音声の言語を切り替える",
+    "input": "言語選択（日本語/英語/中国語）",
+    "output": "選択された言語の音声ファイル情報",
+    "user": "一般ユーザー"
+  },
+  {
+    "id": "FUN-009",
+    "category": "GCP連携",
+    "function_name": "ファイル保存機能",
+    "description": "アップロードされたファイルをGCPバケットに保存する",
+    "input": "ファイル、保存先パス",
+    "output": "保存されたファイルのURL",
+    "user": "システム"
+  },
+  {
+    "id": "FUN-010",
+    "category": "GCP連携",
+    "function_name": "ファイル取得機能",
+    "description": "GCPバケットからファイルを取得する",
+    "input": "ファイルのURL",
+    "output": "ファイルデータ",
+    "user": "システム"
+  },
+  {
+    "id": "FUN-011",
+    "category": "コンテンツ管理",
+    "function_name": "スライドショー設定機能",
+    "description": "スライドショーの表示設定を管理する",
+    "input": "自動再生設定、表示時間、遷移効果",
+    "output": "更新された表示設定",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-012",
+    "category": "コンテンツ管理",
+    "function_name": "公開制御機能",
+    "description": "スライドショーの公開/非公開を制御する",
+    "input": "PDFファイルID、公開設定",
+    "output": "更新された公開状態",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-013",
+    "category": "バージョン管理",
+    "function_name": "ファイルバージョン保存機能",
+    "description": "アップロードされたファイルのバージョンを保存する",
+    "input": "ファイル、バージョン情報",
+    "output": "バージョン管理情報",
+    "user": "システム"
+  },
+  {
+    "id": "FUN-014",
+    "category": "バージョン管理",
+    "function_name": "バージョン復元機能",
+    "description": "過去のバージョンのファイルを復元する",
+    "input": "ファイルID、バージョン番号",
+    "output": "復元されたファイル",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-015",
+    "category": "ファイル管理",
+    "function_name": "ファイル一覧表示機能",
+    "description": "アップロードされたPDFファイルと音声ファイルの一覧を表示する",
+    "input": "検索条件、ソート条件",
+    "output": "ファイル一覧",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-016",
+    "category": "ファイル管理",
+    "function_name": "ファイル検索機能",
+    "description": "PDFファイルや音声ファイルを検索する",
+    "input": "検索キーワード、ファイル種別、言語",
+    "output": "検索結果一覧",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-017",
+    "category": "音声再生",
+    "function_name": "音声再生制御機能",
+    "description": "音声の再生、一時停止、停止を制御する",
+    "input": "制御コマンド（再生/一時停止/停止）",
+    "output": "更新された再生状態",
+    "user": "一般ユーザー"
+  },
+  {
+    "id": "FUN-018",
+    "category": "ファイル管理",
+    "function_name": "ファイル削除機能",
+    "description": "アップロードされたファイルを削除する",
+    "input": "ファイルID",
+    "output": "削除結果",
+    "user": "システム管理者"
+  },
+  {
+    "id": "FUN-019",
+    "category": "コンテンツ管理",
+    "function_name": "言語別メタデータ管理機能",
+    "description": "PDFと音声ファイルの言語別メタデータを管理する",
+    "input": "ファイルID、言語、メタデータ情報",
+    "output": "更新されたメタデータ",
+    "user": "システム管理者"
+  }
+]

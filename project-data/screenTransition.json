@@ -1,0 +1,34 @@
+[
+  {
+    "id": "PDFファイル管理",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> Dashboard[管理者ダッシュボード]\\n    Dashboard --> PDFList[PDF一覧画面]\\n    PDFList --> PDFUpload[PDFアップロード画面]\\n    PDFUpload --> PDFMeta[PDFメタデータ設定画面]\\n    PDFMeta --> PDFConfirm[確認画面]\\n    PDFConfirm --> PDFSuccess[完了画面]\\n    PDFList --> PDFEdit[PDF編集画面]\\n    PDFEdit --> PDFMeta\\n    PDFSuccess --> PDFList\\n    PDFList --> PDFDetail[PDF詳細画面]\\n    PDFDetail --> PDFEdit\"\n}"
+  },
+  {
+    "id": "音声ファイル管理",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> AdminTop[管理画面トップ]\\n    AdminTop --> AudioList[音声ファイル一覧画面]\\n    AudioList --> AudioUpload[音声アップロード画面]\\n    AudioUpload --> AudioConfirm[音声アップロード確認画面]\\n    AudioConfirm --> AudioComplete[音声アップロード完了画面]\\n    AudioList --> AudioLink[音声PDFページ紐付け画面]\\n    AudioLink --> AudioLinkConfirm[音声紐付け確認画面]\\n    AudioLinkConfirm --> AudioLinkComplete[音声紐付け完了画面]\\n    AudioList --> AudioDetail[音声ファイル詳細画面]\\n    AudioDetail --> AudioEdit[音声情報編集画面]\\n    AudioEdit --> AudioEditConfirm[音声情報編集確認画面]\\n    AudioEditConfirm --> AudioEditComplete[音声情報編集完了画面]\"\n}"
+  },
+  {
+    "id": "スライドショー表示",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> Top[トップページ]\\n    Top --> SlideList[スライドショー一覧]\\n    SlideList --> SlideView[スライド表示画面]\\n    SlideView --> PageControl[ページ切替コントロール]\\n    PageControl --> PrevPage[前ページ表示]\\n    PageControl --> NextPage[次ページ表示]\\n    PrevPage --> SlideView\\n    NextPage --> SlideView\\n    SlideView --> FullScreen[全画面表示]\\n    FullScreen --> SlideView\"\n}"
+  },
+  {
+    "id": "音声再生",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> SlideShow[スライドショー画面]\\n    SlideShow --> AudioControl[音声再生制御パネル]\\n    AudioControl --> PlayPause[再生/一時停止ボタン]\\n    AudioControl --> Stop[停止ボタン]\\n    AudioControl --> LanguageSelect[言語選択パネル]\\n    LanguageSelect --> Japanese[日本語選択]\\n    LanguageSelect --> English[英語選択]\\n    LanguageSelect --> Chinese[中国語選択]\\n    Japanese --> AudioControl\\n    English --> AudioControl\\n    Chinese --> AudioControl\\n    PlayPause --> SlideShow\\n    Stop --> SlideShow\"\n}"
+  },
+  {
+    "id": "GCP連携",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> AdminTop[管理者トップ画面]\\n    AdminTop --> FileUpload[ファイルアップロード画面]\\n    FileUpload --> FileList[ファイル一覧画面]\\n    FileUpload --> GCPStorage[GCPストレージ連携処理]\\n    FileList --> FileDetail[ファイル詳細画面]\\n    FileList --> GCPStorage\\n    FileDetail --> FileDownload[ファイルダウンロード画面]\\n    FileDownload --> GCPStorage\\n    GCPStorage --> FileList\\n    FileList --> AdminTop\"\n}"
+  },
+  {
+    "id": "コンテンツ管理",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> AdminTop[管理者トップ画面]\\n    AdminTop --> ContentList[コンテンツ一覧画面]\\n    ContentList --> ContentEdit[コンテンツ編集画面]\\n    ContentEdit --> SlideConfig[スライドショー設定画面]\\n    SlideConfig --> PublishControl[公開制御画面]\\n    ContentEdit --> MetaData[メタデータ管理画面]\\n    MetaData --> LanguageJa[日本語メタデータ設定]\\n    MetaData --> LanguageEn[英語メタデータ設定]\\n    MetaData --> LanguageCn[中国語メタデータ設定]\\n    LanguageJa --> ContentList\\n    LanguageEn --> ContentList\\n    LanguageCn --> ContentList\\n    SlideConfig --> ContentList\\n    PublishControl --> ContentList\"\n}"
+  },
+  {
+    "id": "バージョン管理",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    L1[ログイン画面] --> M1[管理画面トップ]\\n    M1 --> F1[ファイル管理一覧画面]\\n    F1 --> V1[バージョン管理画面]\\n    V1 --> VL1[バージョン履歴一覧]\\n    VL1 --> VD1[バージョン詳細画面]\\n    VD1 --> R1[バージョン復元確認画面]\\n    R1 --> R2[バージョン復元完了画面]\\n    R2 --> F1\\n    VD1 --> C1[バージョン比較画面]\\n    C1 --> VD1\\n    F1 --> U1[ファイルアップロード画面]\\n    U1 --> F1\"\n}"
+  },
+  {
+    "id": "ファイル管理",
+    "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> FileList[ファイル一覧画面]\\n    FileList --> FileSearch[ファイル検索画面]\\n    FileSearch --> FileSearchResult[検索結果一覧画面]\\n    FileSearchResult --> FileDetail[ファイル詳細画面]\\n    FileList --> FileDetail\\n    FileDetail --> FileDelete[ファイル削除確認画面]\\n    FileDelete --> DeleteComplete[削除完了画面]\\n    DeleteComplete --> FileList\\n    FileSearchResult --> FileDelete\"\n\n}"
+  }
+]

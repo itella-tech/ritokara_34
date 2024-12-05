@@ -39,7 +39,10 @@ export default function PDFList() {
               <TableCell>{file.title}</TableCell>
               <TableCell>{file.description}</TableCell>
               <TableCell>{new Date(file.created_at).toLocaleDateString()}</TableCell>
-              <TableCell>
+              <TableCell className="space-x-2">
+                <Link to={`/admin/pdf/${file.id}/details`}>
+                  <Button variant="outline" size="sm">Details</Button>
+                </Link>
                 <a 
                   href={getFileUrl('pdfs', file.file_path)} 
                   target="_blank" 

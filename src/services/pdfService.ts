@@ -57,7 +57,7 @@ export const pdfService = {
     const { data, error } = await supabase
       .from('pdf_files')
       .select('*')
-      .eq('user_id', userId)
+      // .eq('user_id', userId) // 一時的にコメントアウト
       .order('created_at', { ascending: false });
 
     if (error) {

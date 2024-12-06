@@ -3,6 +3,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { PdfFile, PdfPageAudio, AudioLanguage } from "@/types/pdf";
 import { pdfService } from "@/services/pdfService";
 import { supabase } from "@/lib/supabaseClient";
+import { useLanguageStore } from "@/stores/languageStore";
 
 // PDFワーカーの設定
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -13,13 +14,13 @@ const LANGUAGE_LABELS: Record<AudioLanguage, string> = {
 };
 
 const Index = () => {
+  const { currentLanguage, setLanguage } = useLanguageStore();
   const [pdfs, setPdfs] = useState<PdfFile[]>([]);
   const [selectedPdf, setSelectedPdf] = useState<PdfFile | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageAudios, setPageAudios] = useState<PdfPageAudio[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<AudioLanguage>('en');
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -31,6 +32,21 @@ const Index = () => {
       loadPdfDetails(selectedPdf);
     }
   }, [selectedPdf]);
+
+  useEffect(() => {
+    handleLanguageChange(currentLanguage);
+  }, [currentLanguage]);
+
+  useEffect(() => {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      const audio = getCurrentPageAudio();
+      if (audio) {
+        currentAudio.src = audio.audio_url || '';
+      }
+    }
+  }, [currentLanguage, currentPage]);
 
   const loadPdfs = async () => {
     try {
@@ -72,7 +88,7 @@ const Index = () => {
   const getCurrentPageAudio = () => {
     return pageAudios.find(audio => 
       audio.page_number === currentPage && 
-      audio.language === selectedLanguage
+      audio.language === currentLanguage
     );
   };
 
@@ -81,7 +97,7 @@ const Index = () => {
       currentAudio.pause();
       currentAudio.currentTime = 0;
     }
-    setSelectedLanguage(language);
+    setLanguage(language);
   };
 
   if (!selectedPdf) {
@@ -149,30 +165,14 @@ const Index = () => {
                 次のページ
               </button>
             </div>
-
-            <div className="flex gap-4 items-center">
-              <span>言語:</span>
-              {(['en', 'zh'] as AudioLanguage[]).map((language) => (
-                <button
-                  key={language}
-                  onClick={() => handleLanguageChange(language)}
-                  className={`px-4 py-2 rounded ${
-                    selectedLanguage === language
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {LANGUAGE_LABELS[language]}
-                </button>
-              ))}
-            </div>
           </div>
 
-          {getCurrentPageAudio() && (
+          {getCurrentPageAudio() ? (
             <div className="mb-4">
               <audio
                 controls
                 className="w-full"
+                key={`${currentPage}-${currentLanguage}`}
                 ref={(audio) => {
                   if (audio) {
                     setCurrentAudio(audio);
@@ -181,6 +181,10 @@ const Index = () => {
               >
                 <source src={getCurrentPageAudio()?.audio_url || ''} />
               </audio>
+            </div>
+          ) : (
+            <div className="mb-4 text-gray-500">
+              {LANGUAGE_LABELS[currentLanguage]}の音声はありません
             </div>
           )}
 

@@ -19,20 +19,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Home className="w-4 h-4" />
               Dashboard
             </Link>
-            <Link 
-              to="/admin/pdf" 
-              className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
-            >
-              <FileText className="w-4 h-4" />
-              PDF Files
-            </Link>
-            <Link 
-              to="/admin/audio" 
-              className="flex items-center gap-2 p-2 hover:bg-accent rounded-md"
-            >
-              <Music className="w-4 h-4" />
-              Audio Files
-            </Link>
           </nav>
         </div>
         <main className="flex-1 p-8">

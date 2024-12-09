@@ -2,7 +2,11 @@ import React from 'react';
 import { useLanguageStore } from '@/stores/languageStore';
 import { AudioLanguage } from '@/types/pdf';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onReturnToList?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onReturnToList }) => {
   const { currentLanguage, setLanguage } = useLanguageStore();
 
   const handleLanguageChange = (language: AudioLanguage) => {
@@ -12,7 +16,12 @@ const Header: React.FC = () => {
   return (
     <header className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-bold">RitoKara</h1>
+        <h1 
+          className="text-xl font-bold cursor-pointer hover:text-gray-300 transition-colors"
+          onClick={onReturnToList}
+        >
+          RitoKara
+        </h1>
         <div className="flex items-center gap-4">
           <button
             className={`px-3 py-1 rounded ${

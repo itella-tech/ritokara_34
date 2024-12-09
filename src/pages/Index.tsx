@@ -4,6 +4,7 @@ import { PdfFile, PdfPageAudio, AudioLanguage } from "@/types/pdf";
 import { pdfService } from "@/services/pdfService";
 import { supabase } from "@/lib/supabaseClient";
 import { useLanguageStore } from "@/stores/languageStore";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 // PDFワーカーの設定
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -169,18 +170,15 @@ const Index = () => {
 
           {getCurrentPageAudio() ? (
             <div className="mb-4">
-              <audio
-                controls
-                className="w-full"
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-gray-600">現在の音声: {LANGUAGE_LABELS[currentLanguage]}</span>
+              </div>
+              <AudioPlayer
+                audioUrl={getCurrentPageAudio()?.audio_url || ''}
+                onLanguageChange={handleLanguageChange}
+                currentLanguage={currentLanguage}
                 key={`${currentPage}-${currentLanguage}`}
-                ref={(audio) => {
-                  if (audio) {
-                    setCurrentAudio(audio);
-                  }
-                }}
-              >
-                <source src={getCurrentPageAudio()?.audio_url || ''} />
-              </audio>
+              />
             </div>
           ) : (
             <div className="mb-4 text-gray-500">

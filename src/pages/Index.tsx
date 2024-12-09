@@ -105,6 +105,13 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container max-w-6xl mx-auto">
+          <div className="mb-8">
+            <AudioPlayer
+              audioUrl=""
+              onLanguageChange={setLanguage}
+              currentLanguage={currentLanguage}
+            />
+          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-8">PDF一覧</h1>
           <div className="grid gap-4">
             {pdfs.map((pdf) => (
@@ -128,6 +135,13 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container max-w-6xl mx-auto">
+        <div className="mb-8">
+          <AudioPlayer
+            audioUrl=""
+            onLanguageChange={setLanguage}
+            currentLanguage={currentLanguage}
+          />
+        </div>
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">{selectedPdf.title}</h1>
           <button
@@ -168,21 +182,23 @@ const Index = () => {
             </div>
           </div>
 
-          {getCurrentPageAudio() ? (
+          {getCurrentPageAudio() && (
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-gray-600">現在の音声: {LANGUAGE_LABELS[currentLanguage]}</span>
               </div>
-              <AudioPlayer
-                audioUrl={getCurrentPageAudio()?.audio_url || ''}
-                onLanguageChange={handleLanguageChange}
-                currentLanguage={currentLanguage}
+              <audio
+                controls
+                className="w-full"
                 key={`${currentPage}-${currentLanguage}`}
-              />
-            </div>
-          ) : (
-            <div className="mb-4 text-gray-500">
-              {LANGUAGE_LABELS[currentLanguage]}の音声はありません
+                ref={(audio) => {
+                  if (audio) {
+                    setCurrentAudio(audio);
+                  }
+                }}
+              >
+                <source src={getCurrentPageAudio()?.audio_url || ''} />
+              </audio>
             </div>
           )}
 

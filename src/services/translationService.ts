@@ -6,15 +6,26 @@ const openai = new OpenAI({
 });
 
 export const translationService = {
-  async translateAudio(audioBlob: Blob, fromLang: string, toLang: string): Promise<string> {
+  async transcribeAudio(audioBlob: Blob): Promise<{ text: string; language: string }> {
     try {
-      // 音声をテキストに変換
       const transcriptionResponse = await openai.audio.transcriptions.create({
         file: new File([audioBlob], "audio.wav"),
         model: "whisper-1",
+        response_format: "verbose_json",
       });
+      return {
+        text: transcriptionResponse.text,
+        language: transcriptionResponse.language
+      };
+    } catch (error) {
+      console.error('Transcription error:', error);
+      throw error;
+    }
+  },
 
-      const text = transcriptionResponse.text;
+  async translateAudio(audioBlob: Blob, fromLang: string, toLang: string): Promise<string> {
+    try {
+      const { text } = await this.transcribeAudio(audioBlob);
       return await this.translateText(text, fromLang, toLang);
     } catch (error) {
       console.error('Translation error:', error);

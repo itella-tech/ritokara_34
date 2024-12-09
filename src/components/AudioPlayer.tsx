@@ -16,6 +16,8 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
   const [isInterpreting, setIsInterpreting] = useState(false);
   const [translatedText, setTranslatedText] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [detectedLanguage, setDetectedLanguage] = useState<string>("");
+  const [translationDirection, setTranslationDirection] = useState<string>("");
   const speechServiceRef = useRef<SpeechService | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -40,13 +42,25 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
     }
   };
 
+  // 通訳終了時に状態をリセット
+  const resetTranslationState = () => {
+    setTranslatedText("");
+    setDetectedLanguage("");
+    setTranslationDirection("");
+  };
+
   const handleSpeechResult = async (text: string) => {
     try {
       setIsProcessing(true);
-      // 選択された言語から日本語へ、または日本語から選択された言語への翻訳
-      const fromLang = SPEECH_LANGUAGES[currentLanguage as SpeechLanguage];
-      const toLang = SPEECH_LANGUAGES.ja;
+      // 日本語で話した場合は選択された言語へ、それ以外の場合は日本語へ翻訳
+      const isJapanese = detectJapanese(text);
+      const fromLang = isJapanese ? SPEECH_LANGUAGES.ja : SPEECH_LANGUAGES[currentLanguage as SpeechLanguage];
+      const toLang = isJapanese ? SPEECH_LANGUAGES[currentLanguage as SpeechLanguage] : SPEECH_LANGUAGES.ja;
       
+      // 検出された言語を表示
+      setDetectedLanguage(isJapanese ? 'ja' : currentLanguage);
+      setTranslationDirection(`${fromLang} → ${toLang}`);
+
       const translatedText = await translationService.translateText(text, fromLang, toLang);
       setTranslatedText(translatedText);
 
@@ -64,12 +78,22 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
   const handleAudioData = async (audioBlob: Blob) => {
     try {
       setIsProcessing(true);
-      const fromLang = SPEECH_LANGUAGES[currentLanguage as SpeechLanguage];
-      const toLang = SPEECH_LANGUAGES.ja;
+      // Whisper APIで音声認識と言語検出を行う
+      const { text, language } = await translationService.transcribeAudio(audioBlob);
       
-      const translatedText = await translationService.translateAudio(audioBlob, fromLang, toLang);
+      // 検出された言語に基づいて翻訳方向を決定
+      const isJapanese = language === 'ja' || language === 'japanese';
+      const fromLang = isJapanese ? SPEECH_LANGUAGES.ja : SPEECH_LANGUAGES[currentLanguage as SpeechLanguage];
+      const toLang = isJapanese ? SPEECH_LANGUAGES[currentLanguage as SpeechLanguage] : SPEECH_LANGUAGES.ja;
+
+      // 検出された言語と翻訳方向を更新
+      setDetectedLanguage(language);
+      setTranslationDirection(`${fromLang} → ${toLang}`);
+
+      const translatedText = await translationService.translateText(text, fromLang, toLang);
       setTranslatedText(translatedText);
 
+      // 翻訳されたテキストを音声合成で読み上げ
       if (speechServiceRef.current) {
         speechServiceRef.current.speak(translatedText);
       }
@@ -78,6 +102,22 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  // 日本語かどうかを判定する関数
+  const detectJapanese = (text: string): boolean => {
+    // 日本語の文字コード範囲を定義
+    const japaneseRanges = [
+      { from: 0x3040, to: 0x309F }, // ひらがな
+      { from: 0x30A0, to: 0x30FF }, // カタカナ
+      { from: 0x4E00, to: 0x9FFF }, // 漢字
+    ];
+
+    // テキストに日本語が含まれているかチェック
+    return text.split('').some(char => {
+      const code = char.charCodeAt(0);
+      return japaneseRanges.some(range => code >= range.from && code <= range.to);
+    });
   };
 
   const toggleInterpretation = async () => {
@@ -94,13 +134,14 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
       } catch (error) {
         console.error('Interpretation error:', error);
         setIsInterpreting(false);
+        resetTranslationState();
       }
     } else {
       if (speechServiceRef.current) {
         await speechServiceRef.current.stopListening();
       }
       setIsInterpreting(false);
-      setTranslatedText("");
+      resetTranslationState();
     }
   };
 
@@ -108,6 +149,7 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
   useEffect(() => {
     if (speechServiceRef.current && isInterpreting) {
       speechServiceRef.current.setLanguage(SPEECH_LANGUAGES[currentLanguage as SpeechLanguage]);
+      resetTranslationState();
     }
   }, [currentLanguage]);
 
@@ -154,14 +196,32 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
       </div>
 
       {isInterpreting && (
-        <div className="p-4 bg-white rounded-lg shadow border border-gray-200">
-          <div className="font-medium text-gray-700 mb-2">通訳テキスト:</div>
-          <div className="text-gray-600 min-h-[50px]">
-            {isProcessing ? (
-              <div className="animate-pulse">音声を処理中...</div>
-            ) : (
-              translatedText || "通訳を待機中..."
-            )}
+        <div className="space-y-4">
+          <div className="p-4 bg-white rounded-lg shadow border border-gray-200">
+            <div className="space-y-2">
+              <div className="text-sm text-gray-500">
+                検出された言語: {detectedLanguage ? (
+                  detectedLanguage === 'ja' || detectedLanguage === 'japanese' ? '日本語' :
+                  detectedLanguage === 'en' ? '英語' :
+                  detectedLanguage === 'zh' ? '中国語' :
+                  detectedLanguage
+                ) : "待機中..."}
+              </div>
+              <div className="text-sm text-gray-500">
+                翻訳方向: {translationDirection || "待機中..."}
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4 bg-white rounded-lg shadow border border-gray-200">
+            <div className="font-medium text-gray-700 mb-2">通訳テキスト:</div>
+            <div className="text-gray-600 min-h-[50px]">
+              {isProcessing ? (
+                <div className="animate-pulse">音声を処理中...</div>
+              ) : (
+                translatedText || "通訳を待機中..."
+              )}
+            </div>
           </div>
         </div>
       )}

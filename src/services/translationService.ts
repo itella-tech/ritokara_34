@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { settingsService } from './settingsService';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -8,11 +9,17 @@ const openai = new OpenAI({
 export const translationService = {
   async transcribeAudio(audioBlob: Blob): Promise<{ text: string; language: string }> {
     try {
+      const settings = await settingsService.getModelSettings();
+      const whisperModel = settings?.whisper_model || 'whisper-1';
+
+      const file = new File([audioBlob], 'audio.wav', { type: audioBlob.type });
+
       const transcriptionResponse = await openai.audio.transcriptions.create({
-        file: new File([audioBlob], "audio.wav"),
-        model: "whisper-1",
-        response_format: "verbose_json",
+        file: file,
+        model: whisperModel,
+        response_format: "verbose_json"
       });
+
       return {
         text: transcriptionResponse.text,
         language: transcriptionResponse.language
@@ -25,8 +32,8 @@ export const translationService = {
 
   async translateAudio(audioBlob: Blob, fromLang: string, toLang: string): Promise<string> {
     try {
-      const { text } = await this.transcribeAudio(audioBlob);
-      return await this.translateText(text, fromLang, toLang);
+      const { text, language } = await this.transcribeAudio(audioBlob);
+      return await this.translateText(text, language, toLang);
     } catch (error) {
       console.error('Translation error:', error);
       throw error;
@@ -35,8 +42,11 @@ export const translationService = {
 
   async translateText(text: string, fromLang: string, toLang: string): Promise<string> {
     try {
+      const settings = await settingsService.getModelSettings();
+      const gptModel = settings?.gpt_model || 'gpt-3.5-turbo';
+
       const chatResponse = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: gptModel,
         messages: [
           {
             role: "system",
@@ -46,10 +56,10 @@ export const translationService = {
             role: "user",
             content: text
           }
-        ]
+        ],
       });
 
-      return chatResponse.choices[0].message.content || '';
+      return chatResponse.choices[0]?.message?.content || '';
     } catch (error) {
       console.error('Text translation error:', error);
       throw error;

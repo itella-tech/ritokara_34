@@ -3,6 +3,7 @@ import Index from './pages/Index'
 import AdminPdfDetails from './pages/admin/pdf/[id]/details'
 import AdminPdfIndex from './pages/admin/pdf/List'
 import ModelSettingsPage from './pages/admin/settings/ModelSettings'
+import DictionarySettings from './pages/admin/settings/DictionarySettings'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/admin/pdf/:id/details" element={<AdminPdfDetails />} />
           <Route path="/admin" element={<AdminPdfIndex />} />
           <Route path="/admin/settings/models" element={<ModelSettingsPage />} />
+          <Route path="/admin/settings/dictionary" element={<DictionarySettings />} />
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { settingsService } from './settingsService';
+import { dictionaryService } from './dictionaryService';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -43,14 +44,17 @@ export const translationService = {
   async translateText(text: string, fromLang: string, toLang: string): Promise<string> {
     try {
       const settings = await settingsService.getModelSettings();
+      const dictionary = await dictionaryService.getDictionary();
       const gptModel = settings?.gpt_model || 'gpt-3.5-turbo';
+
+      const dictionaryPrompt = dictionary ? dictionaryService.formatTermsForPrompt(dictionary.terms) : '';
 
       const chatResponse = await openai.chat.completions.create({
         model: gptModel,
         messages: [
           {
             role: "system",
-            content: `You are a professional interpreter. Translate from ${fromLang} to ${toLang} naturally and fluently.`
+            content: `You are a professional interpreter. Translate from ${fromLang} to ${toLang} naturally and fluently.${dictionaryPrompt}`
           },
           {
             role: "user",

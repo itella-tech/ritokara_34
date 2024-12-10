@@ -66,7 +66,7 @@ export function AudioPlayer({ audioUrl, onLanguageChange, currentLanguage }: Aud
 
       // 翻訳されたテキストを音声合成で読み上げ
       if (speechServiceRef.current) {
-        speechServiceRef.current.speak(translatedText);
+        // speechServiceRef.current.speak(translatedText);
       }
     } catch (error) {
       console.error('Translation error:', error);

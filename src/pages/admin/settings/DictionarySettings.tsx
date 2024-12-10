@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { dictionaryService } from '@/services/dictionaryService';
+import AdminLayout from '@/components/layouts/AdminLayout';
 
 const DictionarySettings = () => {
   const [terms, setTerms] = useState<string>('');
@@ -36,7 +37,7 @@ const DictionarySettings = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <AdminLayout>
       <h1 className="text-2xl font-bold mb-8">翻訳辞書設定</h1>
       
       <form onSubmit={handleSubmit} className="max-w-2xl">
@@ -76,7 +77,7 @@ const DictionarySettings = () => {
           </div>
         )}
       </form>
-    </div>
+    </AdminLayout>
   );
 };
 

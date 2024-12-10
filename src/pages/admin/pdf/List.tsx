@@ -1,60 +1,49 @@
-import { Link } from 'react-router-dom'
-import AdminLayout from '@/components/layouts/AdminLayout'
-import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { useFiles } from '@/hooks/useFiles'
-import { getFileUrl } from '@/lib/storage'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { PdfFile } from '@/types/pdf';
+import { supabase } from '@/lib/supabaseClient';
+import AdminLayout from '@/components/layouts/AdminLayout';
 
-export default function PDFList() {
-  const { getPDFFiles } = useFiles()
-  const { data: pdfFiles } = getPDFFiles()
+const AdminPdfIndex = () => {
+  const [pdfs, setPdfs] = useState<PdfFile[]>([]);
+
+  useEffect(() => {
+    fetchPdfs();
+  }, []);
+
+  const fetchPdfs = async () => {
+    const { data, error } = await supabase
+      .from('pdf_files')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching PDFs:', error);
+      return;
+    }
+
+    setPdfs(data || []);
+  };
 
   return (
     <AdminLayout>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">PDF Files</h1>
-        <Link to="/admin/pdf/upload">
-          <Button>Upload PDF</Button>
-        </Link>
+      <h1 className="text-2xl font-bold text-gray-900 mb-8">PDF一覧</h1>
+      <div className="grid gap-4">
+        {pdfs.map((pdf) => (
+          <Link
+            key={pdf.id}
+            to={`/admin/pdf/${pdf.id}/details`}
+            className="block bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow"
+          >
+            <h2 className="text-xl font-semibold text-gray-900">{pdf.title}</h2>
+            {pdf.description && (
+              <p className="text-gray-600 mt-2">{pdf.description}</p>
+            )}
+          </Link>
+        ))}
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {pdfFiles?.map((file) => (
-            <TableRow key={file.id}>
-              <TableCell>{file.title}</TableCell>
-              <TableCell>{file.description}</TableCell>
-              <TableCell>{new Date(file.created_at).toLocaleDateString()}</TableCell>
-              <TableCell className="space-x-2">
-                <Link to={`/admin/pdf/${file.id}/details`}>
-                  <Button variant="outline" size="sm">Details</Button>
-                </Link>
-                <a 
-                  href={getFileUrl('pdfs', file.file_path)} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="sm">View</Button>
-                </a>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </AdminLayout>
-  )
-}
+  );
+};
+
+export default AdminPdfIndex;

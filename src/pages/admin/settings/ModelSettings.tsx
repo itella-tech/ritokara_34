@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { settingsService } from '@/services/settingsService';
 import { ModelSettings, AVAILABLE_WHISPER_MODELS, AVAILABLE_GPT_MODELS, WhisperModel, GPTModel } from '@/types/settings';
+import AdminLayout from '@/components/layouts/AdminLayout';
 
 const ModelSettingsPage = () => {
   const [settings, setSettings] = useState<ModelSettings | null>(null);
@@ -42,7 +43,7 @@ const ModelSettingsPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <AdminLayout>
       <h1 className="text-2xl font-bold mb-8">モデル設定</h1>
       
       <form onSubmit={handleSubmit} className="max-w-md">
@@ -96,7 +97,7 @@ const ModelSettingsPage = () => {
           </div>
         )}
       </form>
-    </div>
+    </AdminLayout>
   );
 };
 
